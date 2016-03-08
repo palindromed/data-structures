@@ -1,5 +1,4 @@
 class LinkedList(object):
-
     def __init__(self, iterable=None):
         if iterable is None:
             self.head_node = Node(None, None)
@@ -8,7 +7,7 @@ class LinkedList(object):
 
     def insert(self, val):
         """Insert a new value at the head of the list."""
-        pass
+        self.head_node = Node(val, self.head_node)
 
     def pop(self):
         """Remove the first value of list and return it."""
@@ -33,9 +32,7 @@ class LinkedList(object):
 
 
 class Node(object):
-
-    def __init__(self, value, reference):
+    def __init__(self, value, next):
         self.value = value
-        self.reference = reference
-
+        self.next = next
 
