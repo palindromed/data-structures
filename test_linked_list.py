@@ -56,7 +56,8 @@ def test_size():
     assert new_list.size() == 0
 
     new_list = LinkedList()
-    new_list.insert([1, 2, 3])
+    for i in range(3):
+        new_list.insert(i)
     new_list.size() == 3
 
 
@@ -67,6 +68,7 @@ def test_search():
     new_list.insert(10)
     node = new_list.search(10)
     assert node.value == 10
+    
     new_list.insert(20)
     new_list.insert(30)
     node = new_list.search(20)
@@ -74,7 +76,8 @@ def test_search():
 
     # using insert with iterable
     new_list = LinkedList()
-    new_list.insert([1, 2, 3])
+    for i in range(3):
+        new_list.insert(i)
     node = new_list.search(2)
     assert node.value == 2
 
