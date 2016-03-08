@@ -68,7 +68,7 @@ def test_search():
     new_list.insert(10)
     node = new_list.search(10)
     assert node.value == 10
-    
+
     new_list.insert(20)
     new_list.insert(30)
     node = new_list.search(20)
@@ -92,7 +92,7 @@ def test_remove():
     for i in range(4):
         new_list.remove(i)
         # testing on .size() makes sure whole list still linked
-        assert new_list.size() == 3 - i
+        assert new_list.size() == 4 - i
         with pytest.raises(Exception):
             new_list.search(i)
 
@@ -102,7 +102,7 @@ def test_remove():
     for i in range(4):
         new_list.remove(i)
         # testing on .size() makes sure whole list still linked
-        assert new_list.size() == 3 - i
+        assert new_list.size() == 4 - i
         with pytest.raises(Exception):
             new_list.search(i)
 
