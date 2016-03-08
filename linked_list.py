@@ -1,3 +1,6 @@
+from __future__ import print_function
+
+
 class LinkedList(object):
     def __init__(self, iterable=None):
         self.head_node = Node(None, None)
@@ -42,22 +45,30 @@ class LinkedList(object):
     def remove(self, node):
         """Remove given node from list if it exists."""
         this = self.head_node
-        if node != this:
+        if node == this:
             self.head_node = this.next
+            return "Removed {}".format(this.value)
         try:
             while node != this:
                 prev_node = this
                 this = this.next
         except AttributeError:
             return "That node does not exist in the list."
-        else:
-            next_node = this.next
-            prev_node.update_next(next_node)
+        next_node = this.next
+        prev_node.update_next(next_node)
+        return "Removed {} and updated the list.".format(this.value)
 
     def display(self):
         """Print list as a Python tuple literal."""
-        print("()")
-        pass
+        tail = self.head_node
+        if tail.next.value is None:
+            print("({})".format(tail.value))
+        else:
+            print("(", end='')
+            while tail.next.value is not None:
+                print("{}, ".format(tail.value), end='')
+                tail = tail.next
+        print("{})".format(tail.value))
 
 
 class Node(object):

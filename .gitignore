@@ -6,7 +6,7 @@ bin/
 include/
 # C extensions
 *.so
-
+pip-selfcheck.json
 # Distribution / packaging
 .Python
 env/
