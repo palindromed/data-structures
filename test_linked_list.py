@@ -74,7 +74,6 @@ def test_search():
     node = new_list.search(20)
     assert node.value == 20
 
-    # using insert with iterable
     new_list = LinkedList()
     for i in range(3):
         new_list.insert(i)
@@ -82,29 +81,35 @@ def test_search():
     assert node.value == 2
 
 
-def test_remove():
+def test_remove_in_list():
     from linked_list import LinkedList
     new_list = LinkedList()
 
-    # test without iterable
+    # populate list
     for i in range(4):
         new_list.insert(i)
-    for i in range(4):
-        new_list.remove(i)
-        # testing on .size() makes sure whole list still linked
-        assert new_list.size() == 4 - i
-        with pytest.raises(Exception):
-            new_list.search(i)
+        assert new_list.size() == i + 1
 
-    # test with iterable
-    new_list = LinkedList()
-    new_list.insert([0, 1, 2, 3])
+    # remove elements and test on size, search
     for i in range(4):
-        new_list.remove(i)
+        new_list.remove(new_list.search(i))
         # testing on .size() makes sure whole list still linked
-        assert new_list.size() == 4 - i
-        with pytest.raises(Exception):
-            new_list.search(i)
+        assert new_list.size() == 3 - i
+        new_list.search(i)  == "That node does not exist in the list."
+
+
+def test_remove_not_in_list():
+    from linked_list import LinkedList, Node
+    new_list = LinkedList()
+    for i in range(3):
+        new_list.insert(i)
+    new_list.remove(new_list.search(0))
+    new_list.remove(new_list.search(1))
+    new_list.remove(new_list.search(2))
+
+    # item not in list
+    node_not_in_list = Node("banana", None)
+    assert new_list.remove(node_not_in_list) == "That node does not exist in the list."
 
 
 # def test_display():
