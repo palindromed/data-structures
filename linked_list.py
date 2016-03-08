@@ -3,7 +3,7 @@ from __future__ import print_function
 
 
 class LinkedList(object):
-    """Create instance of linked list"""
+    """Create instance of linked list."""
 
     def __init__(self, iterable=[]):
         """Construct a linked list"""
@@ -17,12 +17,12 @@ class LinkedList(object):
 
     def pop(self):
         """Remove the first value of list and return it."""
-        try:
+        if self.head_node.value is None:
+            return "The list is empty."
+        else:
             return_value = self.head_node.value
             self.head_node = self.head_node.next
             return return_value
-        except AttributeError:
-            return "The list is empty."
 
     def size(self):
         """Return the length of the list."""
