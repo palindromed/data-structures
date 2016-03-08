@@ -68,13 +68,12 @@ def test_search():
     new_list.insert(10)
     node = new_list.search(10)
     assert node.value == 10
-    
+
     new_list.insert(20)
     new_list.insert(30)
     node = new_list.search(20)
     assert node.value == 20
 
-    # using insert with iterable
     new_list = LinkedList()
     for i in range(3):
         new_list.insert(i)
@@ -92,19 +91,17 @@ def test_remove():
     for i in range(4):
         new_list.remove(i)
         # testing on .size() makes sure whole list still linked
-        assert new_list.size() == 3 - i
-        with pytest.raises(Exception):
-            new_list.search(i)
+        assert new_list.size() == 4 - i
+        new_list.search(i)  == "That node does not exist in the list."
 
-    # test with iterable
     new_list = LinkedList()
-    new_list.insert([0, 1, 2, 3])
+    for i in range(3):
+        new_list.insert(i)
     for i in range(4):
         new_list.remove(i)
         # testing on .size() makes sure whole list still linked
-        assert new_list.size() == 3 - i
-        with pytest.raises(Exception):
-            new_list.search(i)
+        assert new_list.size() == 4 - i
+        new_list.search(i)  == "That node does not exist in the list."
 
 
 # def test_display():
