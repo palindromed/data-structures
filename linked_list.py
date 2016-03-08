@@ -17,12 +17,12 @@ class LinkedList(object):
 
     def pop(self):
         """Remove the first value of list and return it."""
-        try:
+        if self.head_node.value is None:
+            return "The list is empty."
+        else:
             return_value = self.head_node.value
             self.head_node = self.head_node.next
             return return_value
-        except AttributeError:
-            return "The list is empty."
 
     def size(self):
         """Return the length of the list."""
