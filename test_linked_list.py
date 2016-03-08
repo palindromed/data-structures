@@ -1,3 +1,5 @@
+import pytest
+
 
 def test_init_empty_list():
     from linked_list import LinkedList
@@ -56,3 +58,53 @@ def test_size():
     new_list = LinkedList()
     new_list.insert([1, 2, 3])
     new_list.size() == 3
+
+
+def test_search():
+    # using insert without iterable
+    from linked_list import LinkedList
+    new_list = LinkedList()
+    new_list.insert(10)
+    node = new_list.search(10)
+    assert node.value == 10
+    new_list.insert(20)
+    new_list.insert(30)
+    node = new_list.search(20)
+    assert node.value == 20
+
+    # using insert with iterable
+    new_list = LinkedList()
+    new_list.insert([1, 2, 3])
+    node = new_list.search(2)
+    assert node.value == 2
+
+
+def test_remove():
+    from linked_list import LinkedList
+    new_list = LinkedList()
+
+    # test without iterable
+    for i in range(4):
+        new_list.insert(i)
+    for i in range(4):
+        new_list.remove(i)
+        # testing on .size() makes sure whole list still linked
+        assert new_list.size() == 3 - i
+        with pytest.raises(Exception):
+            new_list.search(i)
+
+    # test with iterable
+    new_list = LinkedList()
+    new_list.insert([0, 1, 2, 3])
+    for i in range(4):
+        new_list.remove(i)
+        # testing on .size() makes sure whole list still linked
+        assert new_list.size() == 3 - i
+        with pytest.raises(Exception):
+            new_list.search(i)
+
+
+# def test_display():
+#     from linked_list import LinkedList
+#     new_list = LinkedList()
+#     assert new_list.display() == '()'
