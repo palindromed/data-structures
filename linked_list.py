@@ -1,12 +1,15 @@
+"""Implement a singly linked list in Python"""
 from __future__ import print_function
 
 
 class LinkedList(object):
-    def __init__(self, iterable=None):
+    """Create instance of linked list"""
+
+    def __init__(self, iterable=[]):
+        """Construct a linked list"""
         self.head_node = Node(None, None)
-        if iterable is not None:
-            for n in range(0, len(iterable)):
-                self.insert(iterable[n])
+        for n in range(0, len(iterable)):
+            self.insert(iterable[n])
 
     def insert(self, val):
         """Insert a new value at the head of the list."""
@@ -34,10 +37,12 @@ class LinkedList(object):
         """Return the node containing val."""
         value = self.head_node.value
         node = self.head_node
+        if val == value:
+            return node
         try:
             while val != value:
-                node = value.next
-                value = value.next.value
+                node = node.next
+                value = node.value
             return node
         except AttributeError:
             return "That value is not in the list."
@@ -48,12 +53,12 @@ class LinkedList(object):
         if node == this:
             self.head_node = this.next
             return "Removed {}".format(this.value)
-        try:
-            while node != this:
-                prev_node = this
-                this = this.next
-        except AttributeError:
-            return "That node does not exist in the list."
+       # try:
+        while node != this:
+            prev_node = this
+            this = this.next
+        #except AttributeError:
+            #return "That node does not exist in the list."
         next_node = this.next
         prev_node.update_next(next_node)
         return "Removed {} and updated the list.".format(this.value)
@@ -68,7 +73,7 @@ class LinkedList(object):
             while tail.next.value is not None:
                 print("{}, ".format(tail.value), end='')
                 tail = tail.next
-        print("{})".format(tail.value))
+            print("{})".format(tail.value))
 
 
 class Node(object):
