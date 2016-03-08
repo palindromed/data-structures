@@ -50,18 +50,18 @@ class LinkedList(object):
     def remove(self, node):
         """Remove given node from list if it exists."""
         this = self.head_node
-        if node == this:
-            self.head_node = this.next
-            return "Removed {}".format(this.value)
-       # try:
-        while node != this:
-            prev_node = this
-            this = this.next
-        #except AttributeError:
-            #return "That node does not exist in the list."
-        next_node = this.next
-        prev_node.update_next(next_node)
-        return "Removed {} and updated the list.".format(this.value)
+        try:
+            if node == this:
+                self.head_node = this.next
+                return "Removed {}".format(this.value)
+            while node != this:
+                prev_node = this
+                this = this.next
+            next_node = this.next
+            prev_node.update_next(next_node)
+            return "Removed {} and updated the list.".format(this.value)
+        except AttributeError:
+            return "That node does not exist in the list."
 
     def display(self):
         """Print list as a Python tuple literal."""
