@@ -3,7 +3,7 @@ from __future__ import print_function
 
 
 class LinkedList(object):
-    """Create instance of linked list"""
+    """Create instance of linked list."""
 
     def __init__(self, iterable=[]):
         """Construct a linked list"""
