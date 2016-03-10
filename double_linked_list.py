@@ -9,50 +9,39 @@ class DoubleLinkedList(object):
         """Construct a Double linked list"""
         self.head_node = None
         self.tail_node = None
-        #self.head_node = DLLNode(None, None, None)
-        #self.tail_node = DLLNode(None, None, None)
+        self.head_sentinal = object()
+        self.tail_sentinal = object()
+
 #        for n in range(0, len(iterable)):
 #            self.insert(iterable[n])
 
     def insert(self, value):
-        """Insert a new node to beginning of list."""
+        """Insert a new value to beginning of list."""
         # create a new node with value as value, with next as current head_node
-        new_node = DLLNode(value, self.head_node, None)
-        # update current head to point to new head as previous
-        if self.head_node is not None:
-            self.head_node.update_previous(new_node)
-        # name new node "head_node"
-        self.head_node = new_node
-        if self.tail_node is None:
-            self.tail_node = new_node
+        if self.head_node is None:
+            self.head_node = DLLNode(value, self.head_sentinal, self.tail_sentinal)
+            self.tail_node = self.head_node
+
+        else:
+            new_head = DLLNode(value, self.head_sentinal, self.head_node)
+            self.head_node.previous = new_head
+            self.head_node = new_head
 
     def append(self, value):
-        """Append a new node to end of the list."""
-        new_node = DLLNode(value, None, self.tail_node)
-        if self.tail_node is not None:
-            self.tail_node.update_next(new_node)
-        self.tail_node = new_node
-        if self.head_node is None:
-            self.head_node = new_node
+        """Add a new value to the end of the list."""
+        if self.tail_node is None:
+            self.tail_node = DLLNode(value, self.head_sentinal, self.tail_sentinal)
+            self.head_node = self.tail_node
+        else:
+            new_tail = DLLNode(value, self.tail_node, self.tail_sentinal)
+            self.tail_node.next = new_tail
+            self.tail_node = new_tail
 
-
-    def pop(self):
-        """Pop the first value off the list and return it"""
-        return_value = None
-        if self.head_node is not None:
-            return_value = self.head_node.value
-            self.head_node.update_previous(None)
-        elif :
-            self.head_node = self.head_node.next
-        return return_value
 
 
 class DLLNode(Node):
     """Add previous value to Node"""
 
-    def __init__(self, value, next, previous):
+    def __init__(self, value, previous, next):
         self.previous = previous
         Node.__init__(self, value, next)
-
-    def update_previous(self, previous):
-        self.previous = previous
