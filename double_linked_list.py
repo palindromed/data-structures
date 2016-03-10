@@ -19,9 +19,10 @@ class DoubleLinkedList(object):
         """Insert a new value to beginning of list."""
         # create a new node with value as value, with next as current head_node
         if self.head_node is None:
-            self.head_node = DLLNode(value, self.head_sentinal, self.tail_sentinal)
+            self.head_node = DLLNode(value,
+                                     self.head_sentinal,
+                                     self.tail_sentinal)
             self.tail_node = self.head_node
-
         else:
             new_head = DLLNode(value, self.head_sentinal, self.head_node)
             self.head_node.previous = new_head
@@ -30,13 +31,44 @@ class DoubleLinkedList(object):
     def append(self, value):
         """Add a new value to the end of the list."""
         if self.tail_node is None:
-            self.tail_node = DLLNode(value, self.head_sentinal, self.tail_sentinal)
+            self.tail_node = DLLNode(value,
+                                     self.head_sentinal,
+                                     self.tail_sentinal)
             self.head_node = self.tail_node
         else:
             new_tail = DLLNode(value, self.tail_node, self.tail_sentinal)
             self.tail_node.next = new_tail
             self.tail_node = new_tail
 
+    def pop(self):
+        """Pop the first value and return it"""
+        # pop an empty list
+        if self.head_node is None:
+            raise ValueError
+        old_head_value = self.head_node.value
+        # pop a one-element list
+        if self.head_node.next == self.tail_sentinal:
+            self.head_node = None
+            self.tail_node = None
+        else:
+            self.head_node = self.head_node.next
+            self.head_node.previous = self.head_sentinal
+        return old_head_value
+
+    def shift(self):
+        """Pop the first value and return it"""
+        # pop an empty list
+        if self.tail_node is None:
+            raise ValueError
+        old_tail_value = self.tail_node.value
+        # pop a one-element list
+        if self.tail_node.previous == self.head_sentinal:
+            self.head_node = None
+            self.tail_node = None
+        else:
+            self.tail_node = self.tail_node.previous
+            self.tail_node.next = self.tail_sentinal
+        return old_tail_value
 
 
 class DLLNode(Node):
