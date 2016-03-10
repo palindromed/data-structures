@@ -56,7 +56,7 @@ class DoubleLinkedList(object):
         return old_head_value
 
     def shift(self):
-        """Pop the first value and return it"""
+        """Shift the last value and return it"""
         # pop an empty list
         if self.tail_node is None:
             raise ValueError
@@ -69,6 +69,12 @@ class DoubleLinkedList(object):
             self.tail_node = self.tail_node.previous
             self.tail_node.next = self.tail_sentinal
         return old_tail_value
+
+    def remove(val):
+        if self.head_node is None:
+            raise ValueError
+        if self.head_node.value == val:
+            self.pop()
 
 
 class DLLNode(Node):
