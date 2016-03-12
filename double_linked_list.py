@@ -70,11 +70,26 @@ class DoubleLinkedList(object):
             self.tail_node.next = self.tail_sentinal
         return old_tail_value
 
-    def remove(val):
+    def remove(self, val):
+        """Search for and remove a value from the list if present"""
         if self.head_node is None:
             raise ValueError
         if self.head_node.value == val:
             self.pop()
+        cursor = self.head_node
+        try:
+            while cursor.value != val:
+                cursor = cursor.next
+
+            update_next = cursor.previous
+            update_previous = cursor.next
+            update_next.next = update_previous
+            if cursor != self.tail_node:
+                update_previous.previous = update_next
+            elif cursor == self.tail_node:
+                self.tail_node = update_next
+        except AttributeError:
+            raise ValueError
 
 
 class DLLNode(Node):
