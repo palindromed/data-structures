@@ -1,4 +1,5 @@
 def proper_parens(string):
+    """Take a string and evaluate if parens are open, broken or balanced."""
     open_count = 0
     close_count = 0
 
