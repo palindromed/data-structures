@@ -3,7 +3,7 @@
 
 
 def proper_parenthetics(string):
-    """"""
+    """Determine if string is paren-balanced"""
     open_count = 0
     for paren in string:
         if paren == ')':
