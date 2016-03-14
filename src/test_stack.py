@@ -5,7 +5,8 @@ def test_init():
     from stack import Stack
     from linked_list import LinkedList, Node
     stk = Stack()
-    assert stk.pop() == "The list is empty."
+    with pytest.raises(ValueError):
+        stk.pop()
 
 
 def test_init_param():
