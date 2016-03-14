@@ -17,8 +17,8 @@ def test_appendleft():
 def test_pop_empty():
     from deque import Deque
     d = Deque()
-    with pytest.raises (ValueError):
-        d.pop(8)
+    with pytest.raises(ValueError):
+        d.pop()
 
 
 def test_pop():
@@ -58,7 +58,7 @@ def test_peekleft():
 def test_size():
     from deque import Deque
     d = Deque()
-    assert d.size == 0
+    assert d.size() == 0
     d.append(9)
     d.append(8)
     d.appendleft(7)

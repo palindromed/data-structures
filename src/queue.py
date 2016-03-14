@@ -1,5 +1,6 @@
 from double_linked_list import DoubleLinkedList
 
+
 class Queue(object):
     """Create a queue data structure"""
     def __init__(self):
