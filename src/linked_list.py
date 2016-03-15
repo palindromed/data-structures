@@ -18,7 +18,7 @@ class LinkedList(object):
     def pop(self):
         """Remove the first value of list and return it."""
         if self.head_node.value is None:
-            return "The list is empty."
+            raise ValueError
         else:
             return_value = self.head_node.value
             self.head_node = self.head_node.next
