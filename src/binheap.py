@@ -1,17 +1,18 @@
-
 # -*- coding: utf-8 -*-
-import math
+from __future__ import division
 
 
 class BinHeap(object):
-    def __init__(self, init=[]):
-        # TODO: test if works when root, childen do not violate heap property
-        self._container = init
-        self._container.insert(0, None)
-        if init != []:
-            self._heapify(1)
+    """Create instance of Bin Heap."""
 
-    def _heapify(self, index):
+    def __init__(self, init=[]):
+        """Create heap empty or with given values."""
+        self._container = [None]
+        for element in init:
+            self.push(element)
+
+    def _sort_down(self, index):
+        # Maintain heap property for children of given node(index).
         left, right = 2 * index, 2 * index + 1
         largest = index
         length = len(self._container) - 1
@@ -24,18 +25,21 @@ class BinHeap(object):
             this_node_value = self._container[index]
             self._container[index] = self._container[largest]
             self._container[largest] = this_node_value
-            # TODO: rewrite as while loop
-            self._heapify(largest)
+            self._sort_down(largest)
 
     def pop(self):
+        """Remove root of heap and ensures heap is maintained."""
         self._container[1] = self._container.pop()
-        self._heapify(1)
+        self._sort_down(1)
 
     def push(self, value):
+        """Add given value to heap and maintain heap property."""
         self._container.append(value)
         child = len(self._container) - 1
-        parent = math.floor(child / 2)
-        while (self._container[child] > self._container[parent] and child > 1):
-            # swap parent and child
-            # move up the chain towards the root
-            pass
+        parent = child // 2
+        while (child > 1 and self._container[child] > self._container[parent]):
+            smaller_parent = self._container[parent]
+            self._container[parent] = self._container[child]
+            self._container[child] = smaller_parent
+            child = parent
+            parent = child // 2
