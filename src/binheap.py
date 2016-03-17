@@ -39,7 +39,6 @@ class BinHeap(object):
         else:
             raise IndexError("The list is empty")
 
-
     def push(self, value):
         """Add given value to heap and maintain heap property."""
         self._container.append(value)
