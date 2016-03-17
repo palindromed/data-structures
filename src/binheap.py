@@ -7,7 +7,7 @@ class BinHeap(object):
 
     def __init__(self, init=[]):
         """Create heap empty or with given values."""
-        self._container = [None]
+        self._container = []
         for element in init:
             self.push(element)
 
@@ -29,15 +29,15 @@ class BinHeap(object):
 
     def pop(self):
         """Remove root of heap and ensures heap is maintained."""
-        self._container[1] = self._container.pop()
-        self._sort_down(1)
+        self._container[0] = self._container.pop()
+        self._sort_down(0)
 
     def push(self, value):
         """Add given value to heap and maintain heap property."""
         self._container.append(value)
         child = len(self._container) - 1
         parent = child // 2
-        while (child > 1 and self._container[child] > self._container[parent]):
+        while (child >= 0 and self._container[child] > self._container[parent]):
             smaller_parent = self._container[parent]
             self._container[parent] = self._container[child]
             self._container[child] = smaller_parent
