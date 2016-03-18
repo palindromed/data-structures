@@ -4,10 +4,10 @@ GRAPHS = [
     ({},
      [],
      []),
-    ({'nodeA': {}},
+    ({'nodeA': set()},
      ['nodeA'],
      []),
-    ({'nodeA': {'nodeB'}, 'nodeB': {}},
+    ({'nodeA': {'nodeB'}, 'nodeB': set()},
      ['nodeA', 'nodeB'],
      [('nodeA', 'nodeB')]),
     ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}},
@@ -21,15 +21,26 @@ GRAPHS = [
 GRAPHS_FOR_NODE_INSERT = [
     ({},
      'nodeN',
-     {'nodeN': {}}),
+     {'nodeN': set()}),
     ({'nodeA': {'nodeB', 'nodeC'}},
      'nodeN',
-     {'nodeA': {'nodeB', 'nodeC'}, 'nodeN': {}}),
+     {'nodeA': {'nodeB', 'nodeC'}, 'nodeN': set()}),
     ({'nodeA': {'nodeA', 'nodeB'}, 'nodeB': {'nodeC', 'nodeA'}},
      'nodeN',
-     {'nodeA': {'nodeA', 'nodeB'}, 'nodeB': {'nodeC', 'nodeA'}, 'nodeN': {}}),
+     {'nodeA': {'nodeA', 'nodeB'}, 'nodeB': {'nodeC', 'nodeA'}, 'nodeN': set()}),
 ]
 
+
+GRAPHS_ADD_EDGE = [
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}, "nodeX", "nodeY",
+      {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': set()}),
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}, 'nodeA', 'nodeB',
+     {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}),
+    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA'}, 'nodeC': {'nodeA', 'nodeC'}},
+        'nodeB', 'nodeC',
+    {'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}}),
+
+]
 
 @pytest.fixture
 def graph_fixture(scope='function'):
@@ -58,18 +69,20 @@ def test_edges(graph_fixture, built_graph, node_list, edge_list):
         assert edge in edge_list
 
 
-# @pytest.mark.parametrize(("built_graph", "new_node", "expected"), GRAPHS_FOR_NODE_INSERT)
-# def test_add_node(graph_fixture, built_graph, new_node, expected):
-#     graph_fixture._container = built_graph
-#     graph_fixture.add_node(new_node)
-#     assert graph_fixture._container == expected
-#     pass
+@pytest.mark.parametrize(("built_graph", "new_node", "expected"), GRAPHS_FOR_NODE_INSERT)
+def test_add_node(graph_fixture, built_graph, new_node, expected):
+    graph_fixture._container = built_graph
+    graph_fixture.add_node(new_node)
+    assert graph_fixture._container == expected
 
 
-# def test_add_edge(graph_fixture, n1, n2):
-#     pass
-# 
-# 
+@pytest.mark.parametrize(("built_graph", "n1", "n2", "expected"), GRAPHS_ADD_EDGE)
+def test_add_edge(graph_fixture, built_graph, n1, n2, expected):
+    graph_fixture._container = built_graph
+    graph_fixture.add_edge(n1, n2)
+    assert graph_fixture._container == expected
+
+
 # def test_del_node(graph_fixture, n):
 #     # if node doesn't exist: raise error
 #     # else: del node

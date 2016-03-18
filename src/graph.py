@@ -20,14 +20,15 @@ class Graph():
 
     def add_node(self, n):
         """Add node to graph."""
-        pass
+        self._container.setdefault(n, set())
 
     def add_edge(self, n1, n2):
         """Add edge connecting node n1 to node n2.
 
         Creates nodes n1, n2 if necessary.
         """
-        pass
+        self.add_node(n2)
+        self._container.setdefault(n1, set()).add(n2)
 
     def del_node(self, n):
         """Delete node"""
