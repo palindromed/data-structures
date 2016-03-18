@@ -32,9 +32,12 @@ class Graph():
 
     def del_node(self, n):
         """Delete node"""
-        # if node doesn't exist: raise error
-        # else: del node
-        pass
+        if self.has_node(n):
+             del self._container[n]
+            for node in self._container:
+                self._container[node].discard(n)
+        else:
+            raise KeyError("Node not in graph.")
 
     def del_edge(self, n1, n2):
         """Delete edge connecting n1 to n2."""
@@ -44,7 +47,7 @@ class Graph():
 
     def has_node(self, n):
         """Return True node exists."""
-        pass
+        return n in self._container
 
     def neighbors(n):
         """Return a list of all nodes connected to n by edges."""

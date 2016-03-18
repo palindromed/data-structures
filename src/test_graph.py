@@ -32,14 +32,27 @@ GRAPHS_FOR_NODE_INSERT = [
 
 
 GRAPHS_ADD_EDGE = [
-    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}, "nodeX", "nodeY",
-      {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': set()}),
-    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}, 'nodeA', 'nodeB',
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}},
+     "nodeX",
+     "nodeY",
+     {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': set()}),
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}},
+     'nodeA',
+     'nodeB',
      {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}),
     ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA'}, 'nodeC': {'nodeA', 'nodeC'}},
-        'nodeB', 'nodeC',
-    {'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}}),
+     'nodeB',
+     'nodeC',
+     {'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}}),
+]
 
+GRAPHS_DEL_NODE = [
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': set()},
+     'nodeA',
+     {'nodeB': set(), 'nodeX': {'nodeY'}, 'nodeY': set()}),
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}},
+     'nodeB',
+     {'nodeX': {'nodeY'}, 'nodeY': set()}),
 ]
 
 @pytest.fixture
@@ -83,12 +96,21 @@ def test_add_edge(graph_fixture, built_graph, n1, n2, expected):
     assert graph_fixture._container == expected
 
 
-# def test_del_node(graph_fixture, n):
-#     # if node doesn't exist: raise error
-#     # else: del node
-#     pass
-# 
-# 
+
+@pytest.mark.parametrize(("built_graph", "node", "expected"), GRAPHS_DEL_NODE)
+def test_del_node_exists(graph_fixture, built_graph, node, expected):
+    graph_fixture._container = built_graph
+    graph_fixture.del_node(node)
+    assert graph_fixture._container == expected
+
+
+def test_del_node_not_exists(graph_fixture, n):
+    # with pytest.raises()
+    # if node doesn't exist: raise error
+    # else: del node
+    pass
+
+
 # def test_del_edge(graph_fixture, n1, n2):
 #     # if edge doesn't exist: raise error
 #     # else: del edge
