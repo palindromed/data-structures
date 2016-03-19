@@ -42,6 +42,29 @@ GRAPHS_ADD_EDGE = [
 
 ]
 
+
+GRAPHS_NODE_DELETE = [
+    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}},
+    'nodeC', {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}),
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': {'nodeX'}},
+    'nodeX', {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeY': set()})
+
+]
+
+IS_NODE_IN_GRAPH = [
+    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}},
+    'nodeC', True),
+    ( {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': {'nodeA'}},
+     'banana', False)
+]
+
+GRAPH_TEST_EDGE = [
+    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}},
+     'nodeA', 'nodeB', {'nodeA': {'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}}),
+    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': {'nodeB'}},
+     'nodeB', 'nodeA', {'nodeA': {'nodeB'}, 'nodeB': set(), 'nodeX': {'nodeY'}, 'nodeY': {'nodeB'}})
+    ]
+
 @pytest.fixture
 def graph_fixture(scope='function'):
     from graph import Graph
@@ -83,22 +106,35 @@ def test_add_edge(graph_fixture, built_graph, n1, n2, expected):
     assert graph_fixture._container == expected
 
 
-# def test_del_node(graph_fixture, n):
-#     # if node doesn't exist: raise error
-#     # else: del node
-#     pass
-# 
-# 
-# def test_del_edge(graph_fixture, n1, n2):
-#     # if edge doesn't exist: raise error
-#     # else: del edge
-#     pass
-# 
-# 
-# def test_has_node(graph_fixture, n):
-#     pass
-# 
-# 
+def test_del_node_not_in_graph(graph_fixture):
+    graph_fixture._container = {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}
+    with pytest.raises(KeyError):
+        graph_fixture.del_node('nodeZ')
+
+@pytest.mark.parametrize(("built_graph", "node", "expected"), GRAPHS_NODE_DELETE)
+def test_del_node_in_graph(graph_fixture, built_graph, node, expected):
+    """Delete node n from graph"""
+    graph_fixture._container = built_graph
+    graph_fixture.del_node(node)
+    assert graph_fixture._container == expected
+
+@pytest.mark.parametrize(("built_graph", 'n1', 'n2', 'expected'), GRAPH_TEST_EDGE)
+def test_del_edge(graph_fixture, built_graph, n1, n2, expected):
+    # if edge doesn't exist: raise error
+    # else: del edge
+    graph_fixture._container = built_graph
+    graph_fixture.del_edge(n1, n2)
+    assert graph_fixture._container == expected
+
+
+
+@pytest.mark.parametrize(("built_graph", "node", "expected"), IS_NODE_IN_GRAPH)
+def test_has_node(graph_fixture, built_graph, node, expected):
+    graph_fixture._container = built_graph
+    assert graph_fixture.has_node(node) == expected
+
+
+
 # def test_neighbors(graph_fixture, n):
 #     # if node doesn't exist: raise error
 #     # else: neighbors(graph_fixture, n)
