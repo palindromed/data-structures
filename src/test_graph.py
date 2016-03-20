@@ -82,6 +82,17 @@ NEIGHBORS = [
      ['nodeB', 'nodeC']),
 ]
 
+ADJACENT = [
+    ({'nodeA': {'nodeB'}, 'nodeB': set()}, 'nodeA', 'nodeB', True),
+    ({'nodeA': {'nodeB'}, 'nodeB': set()}, 'nodeB', 'nodeA', False),
+]
+
+ADJACENT_NODES_GONE = [
+    ({'nodeA': {'nodeB'}, 'nodeB': set()}, 'nodeX', 'nodeB'),
+    ({'nodeA': {'nodeB'}, 'nodeB': set()}, 'nodeX', 'nodeY'),
+    ({'nodeA': {'nodeB'}, 'nodeB': set()}, 'nodeA', 'nodeY'),
+]
+
 @pytest.fixture
 def graph_fixture(scope='function'):
     from graph import Graph
@@ -164,6 +175,16 @@ def test_neighbors_none(graph_fixture):
         graph_fixture.neighbors('nodeB')
 
 
-def test_adjacent(graph_fixture):
+@pytest.mark.parametrize(('built_graph', 'n1', 'n2', 'expected'), ADJACENT)
+def test_adjacent(graph_fixture, built_graph, n1, n2, expected):
     # if n1, n2 don't exist: raise error
-    assert False
+    graph_fixture._container = built_graph
+    assert graph_fixture.adjacent(n1, n2) == expected
+
+
+@pytest.mark.parametrize(('built_graph', 'n1', 'n2'), ADJACENT_NODES_GONE)
+def test_adjacent_not_exists(graph_fixture, built_graph, n1, n2):
+    # if n1, n2 don't exist: raise error
+    graph_fixture._container = built_graph
+    with pytest.raises(KeyError):
+        graph_fixture.adjacent(n1, n2)

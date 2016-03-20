@@ -31,7 +31,7 @@ class Graph():
         self._container.setdefault(n1, set()).add(n2)
 
     def del_node(self, n):
-        """Delete node"""
+        """Delete node."""
         if self.has_node(n):
             del self._container[n]
             for node in self._container:
@@ -42,7 +42,6 @@ class Graph():
     def del_edge(self, n1, n2):
         """Delete edge connecting n1 to n2."""
         try:
-            # NOTE: deliberately not using .discard()
             self._container[n1].remove(n2)
         except (KeyError, ValueError):
             raise ValueError("Edge not in graph.")
@@ -59,8 +58,9 @@ class Graph():
 
     def adjacent(self, n1, n2):
         """Return True if n1 is connected to n2 by an edge."""
-        # if n1, n2 don't exist: raise error
-        if self.has_node(n1) and self.has_node(n2):
-            return n2 in self._container[n1]
-        else:
+        # NOTE: try...except meant to indicate error raising is deliberate
+        try:
+            self._container[n2]
+        except KeyError:
             raise KeyError
+        return n2 in self._container[n1]
