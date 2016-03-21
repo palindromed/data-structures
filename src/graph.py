@@ -8,7 +8,7 @@ class Graph():
 
     def nodes(self):
         """Return a list of all nodes."""
-        return [node for node in self._container.keys()]
+        return [node for node in self._container]
 
     def edges(self):
         """Retun a list of all edges."""
@@ -31,38 +31,36 @@ class Graph():
         self._container.setdefault(n1, set()).add(n2)
 
     def del_node(self, n):
-        """Delete node"""
+        """Delete node."""
         if self.has_node(n):
-            print('node in graph')
-            print(self._container)
             del self._container[n]
-            print(self._container)
             for node in self._container:
                 self._container[node].discard(n)
         else:
-            raise KeyError("Node not in graph")
+            raise KeyError("Node not in graph.")
 
     def del_edge(self, n1, n2):
         """Delete edge connecting n1 to n2."""
-        # if edge doesn't exist: raise error
-        # else: del edge
-        if n2 in self._container[n1]:
-            self._container[n1].discard(n2)
-        else:
-            raise ValueError("That edge is not in the graph")
-        pass
+        try:
+            self._container[n1].remove(n2)
+        except (KeyError, ValueError):
+            raise ValueError("Edge not in graph.")
 
     def has_node(self, n):
         """Return True node exists."""
         return n in self._container
 
-    def neighbors(n):
+    def neighbors(self, n):
         """Return a list of all nodes connected to n by edges."""
-        # if node doesn't exist: raise error
-        # else: neighbors(n)
-        pass
+        if not self.has_node(n):
+            raise KeyError
+        return [k for k, v in self._container.items() if n in v]
 
-    def adjacent(n1, n2):
+    def adjacent(self, n1, n2):
         """Return True if n1 is connected to n2 by an edge."""
-        # if n1, n2 don't exist: raise error
-        pass
+        # NOTE: try...except meant to indicate error raising is deliberate
+        try:
+            self._container[n2]
+        except KeyError:
+            raise KeyError
+        return n2 in self._container[n1]
