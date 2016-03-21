@@ -1,4 +1,5 @@
-import itertools
+from stack import Stack
+from queue import Queue
 
 
 class Graph():
@@ -54,7 +55,8 @@ class Graph():
         """Return a list of all nodes connected to n by edges."""
         if not self.has_node(n):
             raise KeyError
-        return [k for k, v in self._container.items() if n in v]
+        #return [k for k, v in self._container.items() if n in v]
+        return [n for n in self._container[n]]
 
     def adjacent(self, n1, n2):
         """Return True if n1 is connected to n2 by an edge."""
@@ -64,3 +66,38 @@ class Graph():
         except KeyError:
             raise KeyError
         return n2 in self._container[n1]
+
+    def breadth_first_traversal(self, start):
+        if self._container == {}:
+            raise IndexError("Empty Graph")
+        queue = Queue()
+        path = [start]
+        queue.enqueue(start)
+        while queue.size() > 0:
+            cursor = queue.dequeue()
+            for neighbor in sorted(self.neighbors(cursor)):
+                if neighbor not in path:
+                    path.append(neighbor)
+                    queue.enqueue(neighbor)
+        return path
+
+    def depth_first_traversal(self, start):
+        if self._container == {}:
+            raise IndexError("Empty Graph")
+        stack = Stack()
+        path = []
+        stack.push(start)
+        #import pdb; pdb.set_trace()
+        while stack.ll.size() > 0:
+            cursor = stack.pop()
+            for neighbor in sorted(self.neighbors(cursor)):
+                if cursor not in path:
+                    path.append(cursor)
+                    stack.push(neighbor)
+        return path
+
+
+
+
+
+

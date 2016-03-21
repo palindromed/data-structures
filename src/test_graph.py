@@ -70,13 +70,13 @@ GRAPHS_DEL_EDGE = [
 NEIGHBORS = [
     ({'nodeA': set(), 'nodeB': {'nodeA'}},
      'nodeB',
-     []),
+     ['nodeA']),
     ({'nodeA': set(), 'nodeB': {'nodeA'}},
      'nodeA',
-     ['nodeB']),
-    ({'nodeA': set(), 'nodeB': {'nodeA'}, 'nodeC': {'nodeA'}},
-     'nodeA',
-     ['nodeB', 'nodeC']),
+     []),
+    # ({'nodeA': set(), 'nodeB': {'nodeA'}, 'nodeC': {'nodeA'}},
+    #  'nodeA',
+    #  ['nodeB', 'nodeC']),
     ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA'}, 'nodeC': {'nodeA'}},
      'nodeA',
      ['nodeB', 'nodeC']),
@@ -94,27 +94,25 @@ ADJACENT_NODES_GONE = [
 ]
 
 
-GRAPHS_NODE_DELETE = [
-    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}},
-    'nodeC', {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}),
-    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': {'nodeX'}},
-    'nodeX', {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeY': set()})
-
+NODE_TRAVERSAL_BREADTH = [
+    ({'A': {'B', 'C'}, 'B': {'A', 'D', 'E'}, 'C': {'A', 'F', 'G'},
+        'D': {'B', 'H'}, 'E': {'B'}, 'F': {'C'}, 'G': {'C'}, 'H': {'D'}},
+        'A',
+        ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
+    ({'A': {'B', 'C'}, 'B': {'C', 'D'}, 'C': set(), 'D': set()},
+     'A',
+     ['A', 'B', 'C', 'D'])
 ]
 
-IS_NODE_IN_GRAPH = [
-    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}},
-    'nodeC', True),
-    ( {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': {'nodeA'}},
-     'banana', False)
+NODE_TRAVERSAL_DEPTH = [
+    ({'A': {'B', 'E'}, "B": {'C', 'D'}, 'E': set(), 'C': set(), 'D': set()},
+     'A',
+     ['A', 'B', 'C', 'D', 'E']),
+    ({'A': {'B', 'E'}, "B": {'C', 'D'}, 'E': set(), 'C': {'A', 'E'}, 'D': set()},
+     'A',
+     ['A', 'B', 'C', 'D', 'E']),
 ]
 
-GRAPH_TEST_EDGE = [
-    ({'nodeA': {'nodeB', 'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}},
-     'nodeA', 'nodeB', {'nodeA': {'nodeC'}, 'nodeB': {'nodeA', 'nodeC'}, 'nodeC': {'nodeA', 'nodeC'}}),
-    ({'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}, 'nodeX': {'nodeY'}, 'nodeY': {'nodeB'}},
-     'nodeB', 'nodeA', {'nodeA': {'nodeB'}, 'nodeB': set(), 'nodeX': {'nodeY'}, 'nodeY': {'nodeB'}})
-    ]
 
 @pytest.fixture
 def graph_fixture(scope='function'):
@@ -157,46 +155,6 @@ def test_add_edge(graph_fixture, built_graph, n1, n2, expected):
     assert graph_fixture._container == expected
 
 
-<<<<<<< HEAD
-def test_del_node_not_in_graph(graph_fixture):
-    graph_fixture._container = {'nodeA': {'nodeB'}, 'nodeB': {'nodeA'}}
-    with pytest.raises(KeyError):
-        graph_fixture.del_node('nodeZ')
-
-@pytest.mark.parametrize(("built_graph", "node", "expected"), GRAPHS_NODE_DELETE)
-def test_del_node_in_graph(graph_fixture, built_graph, node, expected):
-    """Delete node n from graph"""
-    graph_fixture._container = built_graph
-    graph_fixture.del_node(node)
-    assert graph_fixture._container == expected
-
-@pytest.mark.parametrize(("built_graph", 'n1', 'n2', 'expected'), GRAPH_TEST_EDGE)
-def test_del_edge(graph_fixture, built_graph, n1, n2, expected):
-    # if edge doesn't exist: raise error
-    # else: del edge
-    graph_fixture._container = built_graph
-    graph_fixture.del_edge(n1, n2)
-    assert graph_fixture._container == expected
-
-
-
-@pytest.mark.parametrize(("built_graph", "node", "expected"), IS_NODE_IN_GRAPH)
-def test_has_node(graph_fixture, built_graph, node, expected):
-    graph_fixture._container = built_graph
-    assert graph_fixture.has_node(node) == expected
-
-
-
-# def test_neighbors(graph_fixture, n):
-#     # if node doesn't exist: raise error
-#     # else: neighbors(graph_fixture, n)
-#     pass
-# 
-# 
-# def test_adjacent(graph_fixture, n1, n2):
-#     # if n1, n2 don't exist: raise error
-#     pass
-=======
 def test_del_node_not_exists(graph_fixture):
     graph_fixture._container = {'nodeA': {'nodeA'}, 'nodeB': set()}
     with pytest.raises(KeyError):
@@ -251,4 +209,32 @@ def test_adjacent_not_exists(graph_fixture, built_graph, n1, n2):
     graph_fixture._container = built_graph
     with pytest.raises(KeyError):
         graph_fixture.adjacent(n1, n2)
->>>>>>> 044a7342b3ce6c678e3dbdca6d3fdfdcf7c6b846
+
+@pytest.mark.parametrize(('built_graph', 'node', 'expected'), NODE_TRAVERSAL_BREADTH)
+def test_traverse_breadth(graph_fixture, built_graph, node, expected):
+    graph_fixture._container = built_graph
+    assert graph_fixture.breadth_first_traversal(node) == expected
+
+def test_empty_graph_breadth(graph_fixture):
+    graph_fixture._container = {}
+    with pytest.raises(IndexError):
+        graph_fixture.breadth_first_traversal('X')
+
+@pytest.mark.parametrize(('built_graph', 'node', 'expected'), NODE_TRAVERSAL_DEPTH)
+def test_traverse_depth(graph_fixture, built_graph, node, expected):
+    graph_fixture._container = built_graph
+    assert graph_fixture.depth_first_traversal(node) == expected
+
+
+
+
+
+
+
+
+
+
+
+
+
+
