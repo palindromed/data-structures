@@ -11,8 +11,8 @@ class Queue(object):
         self.container.insert(val)
 
     def dequeue(self):
-        self.container.shift()
         """Removes next item and returns it"""
+        return self.container.shift()
 
     def peek(self):
         """Return next value in queue without dequeuing it"""
