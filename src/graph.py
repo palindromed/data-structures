@@ -1,4 +1,4 @@
-from stack import Stack
+from collections import deque
 from queue import Queue
 
 
@@ -84,16 +84,16 @@ class Graph():
     def depth_first_traversal(self, start):
         if self._container == {}:
             raise IndexError("Empty Graph")
-        stack = Stack()
+        stack = deque()
         path = []
-        stack.push(start)
-        #import pdb; pdb.set_trace()
-        while stack.ll.size() > 0:
+        stack.append(start)
+        while stack:
             cursor = stack.pop()
-            for neighbor in sorted(self.neighbors(cursor)):
-                if cursor not in path:
-                    path.append(cursor)
-                    stack.push(neighbor)
+            if cursor not in path:
+                path.append(cursor)
+                for neighbor in sorted(self.neighbors(cursor)):
+                    stack.append(neighbor)
+            #        import pdb; pdb.set_trace()
         return path
 
 

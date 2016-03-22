@@ -101,16 +101,31 @@ NODE_TRAVERSAL_BREADTH = [
         ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']),
     ({'A': {'B', 'C'}, 'B': {'C', 'D'}, 'C': set(), 'D': set()},
      'A',
-     ['A', 'B', 'C', 'D'])
+     ['A', 'B', 'C', 'D']),
+    ({'a': set()}, 'a', ['a']),
 ]
 
 NODE_TRAVERSAL_DEPTH = [
     ({'A': {'B', 'E'}, "B": {'C', 'D'}, 'E': set(), 'C': set(), 'D': set()},
      'A',
-     ['A', 'B', 'C', 'D', 'E']),
+     ['A', 'E', 'B', 'D', 'C']),
     ({'A': {'B', 'E'}, "B": {'C', 'D'}, 'E': set(), 'C': {'A', 'E'}, 'D': set()},
      'A',
-     ['A', 'B', 'C', 'D', 'E']),
+     ['A', 'E', 'B', 'D', 'C']),
+    ({'a': {'b', 'g'},
+      'b': {'c'},
+      'g': {'h', 'j'},
+      'c': {'d'},
+      'h': {'i'},
+      'j': {'k'},
+      'd': {'e', 'f'},
+      'i': set(),
+      'k': set(),
+      'e': set(),
+      'f': set()},
+     'a',
+     ['a', 'g', 'j', 'k', 'h', 'i', 'b', 'c', 'd', 'f', 'e']),
+    ({'a': set()}, 'a', ['a']),
 ]
 
 
@@ -215,6 +230,7 @@ def test_traverse_breadth(graph_fixture, built_graph, node, expected):
     graph_fixture._container = built_graph
     assert graph_fixture.breadth_first_traversal(node) == expected
 
+
 def test_empty_graph_breadth(graph_fixture):
     graph_fixture._container = {}
     with pytest.raises(IndexError):
@@ -225,6 +241,11 @@ def test_traverse_depth(graph_fixture, built_graph, node, expected):
     graph_fixture._container = built_graph
     assert graph_fixture.depth_first_traversal(node) == expected
 
+
+def test_traverse_depth_empty(graph_fixture):
+    graph_fixture._container = {}
+    with pytest.raises(IndexError):
+        graph_fixture.depth_first_traversal('node')
 
 
 
