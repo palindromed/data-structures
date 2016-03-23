@@ -21,29 +21,30 @@ class Graph():
 
     def add_node(self, n):
         """Add node to graph."""
-        self._container.setdefault(n, set())
+        self._container.setdefault(n, {})
 
-    def add_edge(self, n1, n2):
+    def add_edge(self, n1, n2, weight='weight'):
         """Add edge connecting node n1 to node n2.
 
         Creates nodes n1, n2 if necessary.
         """
+        self.add_node(n1)  # add_node handles this, whether or not n1 exists
         self.add_node(n2)
-        self._container.setdefault(n1, set()).add(n2)
+        self._container[n1][n2] = weight
 
     def del_node(self, n):
         """Delete node."""
         if self.has_node(n):
             del self._container[n]
             for node in self._container:
-                self._container[node].discard(n)
+                self._container[node].pop(n, None)
         else:
             raise KeyError("Node not in graph.")
 
     def del_edge(self, n1, n2):
         """Delete edge connecting n1 to n2."""
         try:
-            self._container[n1].remove(n2)
+            del self._container[n1][n2]
         except (KeyError, ValueError):
             raise ValueError("Edge not in graph.")
 
@@ -55,7 +56,6 @@ class Graph():
         """Return a list of all nodes connected to n by edges."""
         if not self.has_node(n):
             raise KeyError
-        #return [k for k, v in self._container.items() if n in v]
         return [n for n in self._container[n]]
 
     def adjacent(self, n1, n2):
@@ -93,11 +93,11 @@ class Graph():
                 path.append(cursor)
                 for neighbor in sorted(self.neighbors(cursor)):
                     stack.append(neighbor)
-            #        import pdb; pdb.set_trace()
         return path
 
+    def get_weight(self, n1, n2):
+        """Return weight for given edge.
 
-
-
-
+        Error for bad node params."""
+        return self._container[n1][n2]
 
