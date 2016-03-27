@@ -377,7 +377,7 @@ def test_get_weight(graph_fixture, built_graph, n1, n2, expected):
     assert graph_fixture.get_weight(n1, n2) == expected
 
 
-@pytest.mark.paramtetrize(('built_graph', 'n1', 'n2', 'expected'), SHORTEST_PATH)
+@pytest.mark.parametrize(('built_graph', 'n1', 'n2', 'expected'), SHORTEST_PATH)
 def test_dijkstra_path(graph_fixture, built_graph, n1, n2, expected):
     graph_fixture._container = built_graph
     assert graph_fixture.dijkstra_path(n1, n2) == expected
