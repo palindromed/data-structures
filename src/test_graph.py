@@ -221,6 +221,31 @@ GET_WEIGHT = [
      'weight4',),
 ]
 
+SHORTEST_PATH = [
+    ({1: {2: 7, 3: 9, 6: 14},
+      2: {1: 7, 3: 10, 4: 15},
+      3: {1: 9, 2: 10, 4: 11, 6: 2},
+      4: {2: 15, 3: 11, 5: 6},
+      5: {4: 6, 6: 9},
+      6: {1: 14, 3: 2, 5: 9}, },
+     1,
+     5,
+     20,
+     # [1, 3, 6, 5],
+     ),
+    ({1: {2: 7, 3: 9, 6: 14},
+      2: {1: 7, 3: 10, 4: 15},
+      3: {1: 9, 2: 10, 4: 11, 6: 2},
+      4: {2: 15, 3: 11, 5: 6},
+      5: {4: 6, 6: 9},
+      6: {1: 14, 3: 2, 5: 9}, },
+     1,
+     5,
+     20,
+     # [1, 3, 6, 5],
+ )
+]
+
 
 @pytest.fixture
 def graph_fixture(scope='function'):
@@ -321,7 +346,8 @@ def test_adjacent_not_exists(graph_fixture, built_graph, n1, n2):
     with pytest.raises(KeyError):
         graph_fixture.adjacent(n1, n2)
 
-@pytest.mark.parametrize(('built_graph', 'node', 'expected'), NODE_TRAVERSAL_BREADTH)
+@pytest.mark.parametrize(('built_graph', 'node', 'expected'),
+                         NODE_TRAVERSAL_BREADTH)
 def test_traverse_breadth(graph_fixture, built_graph, node, expected):
     graph_fixture._container = built_graph
     assert graph_fixture.breadth_first_traversal(node) == expected
@@ -332,7 +358,8 @@ def test_empty_graph_breadth(graph_fixture):
     with pytest.raises(IndexError):
         graph_fixture.breadth_first_traversal('X')
 
-@pytest.mark.parametrize(('built_graph', 'node', 'expected'), NODE_TRAVERSAL_DEPTH)
+@pytest.mark.parametrize(('built_graph', 'node', 'expected'),
+                         NODE_TRAVERSAL_DEPTH)
 def test_traverse_depth(graph_fixture, built_graph, node, expected):
     graph_fixture._container = built_graph
     assert graph_fixture.depth_first_traversal(node) == expected
@@ -348,3 +375,11 @@ def test_traverse_depth_empty(graph_fixture):
 def test_get_weight(graph_fixture, built_graph, n1, n2, expected):
     graph_fixture._container = built_graph
     assert graph_fixture.get_weight(n1, n2) == expected
+
+
+@pytest.mark.parametrize(('built_graph', 'n1', 'n2', 'expected'), SHORTEST_PATH)
+def test_dijkstra_path(graph_fixture, built_graph, n1, n2, expected):
+    graph_fixture._container = built_graph
+    assert graph_fixture.dijkstra_path(n1, n2) == expected
+
+

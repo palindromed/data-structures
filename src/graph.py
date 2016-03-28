@@ -1,5 +1,6 @@
 from collections import deque
 from queue import Queue
+from math import inf
 
 
 class Graph():
@@ -101,3 +102,42 @@ class Graph():
         Error for bad node params."""
         return self._container[n1][n2]
 
+    def dijkstra_path(self, n1, n2):
+        # for key, value in dist: key =  given node, value = total distance from given node to source
+        dist = {}
+        unvisited = []
+        path = {}
+        for node in self._container:
+            dist[node] = inf
+            path[node] = ''
+            unvisited.append(node)
+        dist[n1] = 0
+        cursor = n1
+
+        while len(unvisited) > 0:
+            cursor = unvisited[0]
+            min_edge = dist[cursor]
+            for node in unvisited:
+                if dist[node] < min_edge:
+                    cursor = node
+                    min_edge = dist[node]
+            if cursor == n2:
+                break
+            unvisited.remove(cursor)
+            for neighbor in self.neighbors(cursor):
+                if neighbor in unvisited:
+                    alt = dist[cursor] + self.get_weight(cursor, neighbor)
+                    if alt < dist[neighbor]:
+                        dist[neighbor] = alt
+                        path[neighbor] = cursor  # ??
+
+        stack = deque()
+        another_cursor = n2
+        stack.appendleft(another_cursor)
+        while another_cursor != n1:
+            stack.appendleft(path[another_cursor])
+            another_cursor = path[another_cursor]
+
+        total = dist[n2]
+
+        return total, stack
