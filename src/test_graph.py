@@ -230,6 +230,7 @@ def graph_fixture(scope='function'):
 
 @pytest.mark.parametrize(("built_graph", "node", "expected"), GRAPHS_DEL_NODE)
 def test_del_node_exists(graph_fixture, built_graph, node, expected):
+    """Confirm con delete existing node."""
     graph_fixture._container = built_graph
     graph_fixture.del_node(node)
     assert graph_fixture._container == expected
@@ -237,6 +238,7 @@ def test_del_node_exists(graph_fixture, built_graph, node, expected):
 
 @pytest.mark.parametrize(("built_graph", "node_list", "edge_list"), GRAPHS)
 def test_nodes(graph_fixture, built_graph, node_list, edge_list):
+    """Confirm can return list of nodes."""
     graph_fixture._container = built_graph
     result = graph_fixture.nodes()
     assert set(result) == set(node_list)
@@ -244,6 +246,7 @@ def test_nodes(graph_fixture, built_graph, node_list, edge_list):
 
 @pytest.mark.parametrize(("built_graph", "node_list", "edge_list"), GRAPHS)
 def test_edges(graph_fixture, built_graph, node_list, edge_list):
+    """Confirm can return list of edges."""
     graph_fixture._container = built_graph
     result = graph_fixture.edges()
     assert set(edge_list) == set(result)
@@ -252,6 +255,7 @@ def test_edges(graph_fixture, built_graph, node_list, edge_list):
 @pytest.mark.parametrize(("built_graph", "new_node", "expected"),
                          GRAPHS_FOR_NODE_INSERT)
 def test_add_node(graph_fixture, built_graph, new_node, expected):
+    """Confirm can add node."""
     graph_fixture._container = built_graph
     graph_fixture.add_node(new_node)
     assert graph_fixture._container == expected
@@ -260,12 +264,14 @@ def test_add_node(graph_fixture, built_graph, new_node, expected):
 @pytest.mark.parametrize(("built_graph", "n1", "n2", "expected"),
                          GRAPHS_ADD_EDGE)
 def test_add_edge(graph_fixture, built_graph, n1, n2, expected):
+    """Confirm can add edge."""
     graph_fixture._container = built_graph
     graph_fixture.add_edge(n1, n2)
     assert graph_fixture._container == expected
 
 
 def test_del_node_not_exists(graph_fixture):
+    """Confirm deleting non-existing node raises error."""
     graph_fixture._container = {'nodeA': {'nodeA': 'weight'}, 'nodeB': {}}
     with pytest.raises(KeyError):
         graph_fixture.del_node('nodeX')
@@ -274,34 +280,40 @@ def test_del_node_not_exists(graph_fixture):
 @pytest.mark.parametrize(("built_graph", "node1", "node2", "expected"),
                          GRAPHS_DEL_EDGE)
 def test_del_edge(graph_fixture, built_graph, node1, node2, expected):
+    """Confirm can delete edge."""
     graph_fixture._container = built_graph
     graph_fixture.del_edge(node1, node2)
     assert graph_fixture._container == expected
 
 
 def test_del_edge_not_exists(graph_fixture):
+    """Confirm attempting to delete non-existing edge raises error."""
     graph_fixture._container = {'nodeA': {}}
     with pytest.raises(ValueError):
         graph_fixture.del_edge('nodeA', 'nodeB')
 
 
 def test_has_node_true(graph_fixture):
+    """Confirm can peek at existing node."""
     graph_fixture._container = {'nodeA': {}}
     assert graph_fixture.has_node('nodeA')
 
 
 def test_has_node_false(graph_fixture):
+    """Confirm can peek at non-existing node."""
     graph_fixture._container = {'nodeA': {}}
     assert not graph_fixture.has_node('nodeB')
 
 
 @pytest.mark.parametrize(("built_graph", 'node', 'expected'), NEIGHBORS)
 def test_neighbors(graph_fixture, built_graph, node, expected):
+    """Confirm can return list of neighbors for given node."""
     graph_fixture._container = built_graph
     assert set(graph_fixture.neighbors(node)) == set(expected)
 
 
 def test_neighbors_none(graph_fixture):
+    """Confirm neighbors errors on bad (non-existant) node."""
     graph_fixture._container = {'nodeA': {}}
     with pytest.raises(KeyError):
         graph_fixture.neighbors('nodeB')
@@ -309,6 +321,7 @@ def test_neighbors_none(graph_fixture):
 
 @pytest.mark.parametrize(('built_graph', 'n1', 'n2', 'expected'), ADJACENT)
 def test_adjacent(graph_fixture, built_graph, n1, n2, expected):
+    """Confirm adjacent basic functionality."""
     # if n1, n2 don't exist: raise error
     graph_fixture._container = built_graph
     assert graph_fixture.adjacent(n1, n2) == expected
@@ -316,6 +329,7 @@ def test_adjacent(graph_fixture, built_graph, n1, n2, expected):
 
 @pytest.mark.parametrize(('built_graph', 'n1', 'n2'), ADJACENT_NODES_GONE)
 def test_adjacent_not_exists(graph_fixture, built_graph, n1, n2):
+    """Confirm adjacent errors on bad parameters."""
     # if n1, n2 don't exist: raise error
     graph_fixture._container = built_graph
     with pytest.raises(KeyError):
@@ -323,22 +337,26 @@ def test_adjacent_not_exists(graph_fixture, built_graph, n1, n2):
 
 @pytest.mark.parametrize(('built_graph', 'node', 'expected'), NODE_TRAVERSAL_BREADTH)
 def test_traverse_breadth(graph_fixture, built_graph, node, expected):
+    """Confirm breadth first traversal basic functionality."""
     graph_fixture._container = built_graph
     assert graph_fixture.breadth_first_traversal(node) == expected
 
 
 def test_empty_graph_breadth(graph_fixture):
+    """Confirm breadth first errors on bad node parameter."""
     graph_fixture._container = {}
     with pytest.raises(IndexError):
         graph_fixture.breadth_first_traversal('X')
 
 @pytest.mark.parametrize(('built_graph', 'node', 'expected'), NODE_TRAVERSAL_DEPTH)
 def test_traverse_depth(graph_fixture, built_graph, node, expected):
+    """Confirm depth first traversal basic functionality."""
     graph_fixture._container = built_graph
     assert graph_fixture.depth_first_traversal(node) == expected
 
 
 def test_traverse_depth_empty(graph_fixture):
+    """Confirm depth first errors on bad node parameter."""
     graph_fixture._container = {}
     with pytest.raises(IndexError):
         graph_fixture.depth_first_traversal('node')
@@ -346,5 +364,6 @@ def test_traverse_depth_empty(graph_fixture):
 
 @pytest.mark.parametrize(('built_graph', 'n1', 'n2', 'expected'), GET_WEIGHT)
 def test_get_weight(graph_fixture, built_graph, n1, n2, expected):
+    """Confirm get weight method basic functionality."""
     graph_fixture._container = built_graph
     assert graph_fixture.get_weight(n1, n2) == expected

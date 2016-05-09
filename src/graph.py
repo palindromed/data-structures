@@ -68,6 +68,7 @@ class Graph():
         return n2 in self._container[n1]
 
     def breadth_first_traversal(self, start):
+        """Traverse graph. Return list of nodes in breadth first order."""
         if self._container == {}:
             raise IndexError("Empty Graph")
         queue = Queue()
@@ -82,6 +83,7 @@ class Graph():
         return path
 
     def depth_first_traversal(self, start):
+        """Traverse graph. Return list of nodes in depth first order."""
         if self._container == {}:
             raise IndexError("Empty Graph")
         stack = deque()
