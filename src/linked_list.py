@@ -65,15 +65,13 @@ class LinkedList(object):
 
     def display(self):
         """Print list as a Python tuple literal."""
-        tail = self.head_node
-        if tail.next.value is None:
-            print("({})".format(tail.value))
-        else:
-            print("(", end='')
-            while tail.next.value is not None:
-                print("{}, ".format(tail.value), end='')
-                tail = tail.next
-            print("{})".format(tail.value))
+        out = u'('
+        cursor = self.head_node
+        while cursor.value is not None:
+            out = ''.join([out, str(cursor.value), u', '])
+            cursor = cursor.next
+        out = ''.join([out, u')'])
+        print(out)
 
 
 class Node(object):

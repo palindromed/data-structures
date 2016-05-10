@@ -1,5 +1,12 @@
 import pytest
 
+DISPLAY = [
+    ([], '()', ),
+    ([1], '(1, )', ),
+    ([1, 2], '(2, 1, )', ),
+    ([1, 2, 3], '(3, 2, 1, )', ),
+]
+
 
 def test_init_empty_list():
     from linked_list import LinkedList
@@ -112,7 +119,15 @@ def test_remove_not_in_list():
     assert new_list.remove(node_not_in_list) == "That node does not exist in the list."
 
 
-# def test_display():
-#     from linked_list import LinkedList
-#     new_list = LinkedList()
-#     assert new_list.display() == '()'
+@pytest.mark.parametrize(("in_", "expected"), DISPLAY)
+def test_display(in_, expected):
+    """Confirm linked list displaying properly."""
+    import sys
+    from linked_list import LinkedList
+    from io import StringIO
+
+    out = StringIO()
+    sys.stdout = out
+    ll = LinkedList(in_)
+    ll.display()
+    assert out.getvalue().strip() == expected
